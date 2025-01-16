@@ -3,6 +3,8 @@ package com.api.server;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ServerStatus {
     private boolean isOnline;
@@ -43,6 +45,12 @@ public class ServerStatus {
                 lastChecked, isOnline ? "Online" : "Offline", responseTime, errorRate, activePlayers);
         statusLog.add(logEntry);
 
+        // Append to file
+        try (FileWriter writer = new FileWriter("server_status.log", true)) {
+            writer.write(logEntry + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
