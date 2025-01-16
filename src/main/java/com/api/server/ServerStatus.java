@@ -1,6 +1,8 @@
 package com.api.server;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerStatus {
     private boolean isOnline;
@@ -8,6 +10,9 @@ public class ServerStatus {
     private double errorRate;
     private int activePlayers;
     private Instant lastChecked;
+
+    // List to store logs
+    private final List<String> statusLog = new ArrayList<>();
 
     public ServerStatus(boolean isOnline, double responseTimeMs, double errorRate, int activePlayers) {
         this.isOnline = isOnline;
@@ -23,6 +28,7 @@ public class ServerStatus {
     public double getErrorRate() { return errorRate; }
     public int getActivePlayers() { return activePlayers; }
     public Instant getLastChecked() { return lastChecked; }
+    public List<String> getStatusLog() { return statusLog; }
 
     // Update status method
     public void updateStatus(boolean isOnline, double responseTime, double errorRate, int activePlayers) {
@@ -31,6 +37,12 @@ public class ServerStatus {
         this.errorRate = errorRate;
         this.activePlayers = activePlayers;
         this.lastChecked = Instant.now();
+
+        // Add entry to log
+        String logEntry = String.format("[%s] Status: %s | Response Time: %.2fms | Error Rate: %.2f%% | Players: %d",
+                lastChecked, isOnline ? "Online" : "Offline", responseTime, errorRate, activePlayers);
+        statusLog.add(logEntry);
+
     }
 }
 

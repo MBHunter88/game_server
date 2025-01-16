@@ -1,12 +1,11 @@
 package com.api.server;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,5 +25,24 @@ public class SeverController {
     @GetMapping("/status")
     public ResponseEntity<ServerStatus> getStatus() {
         return ResponseEntity.ok(serverStatus);
+    }
+
+        // Get server status log history
+        @GetMapping("/status/logs")
+        public ResponseEntity<List<String>> getStatusLogs() {
+            return ResponseEntity.ok(serverStatus.getStatusLog());
+        }
+
+        // Update server status and log changes
+        @PostMapping("/update")
+        public ResponseEntity<String> updateServerStatus(
+        @RequestParam boolean isOnline,
+        @RequestParam double responseTimeMs,
+        @RequestParam double errorRate,
+        @RequestParam int activePlayers) {
+
+            serverStatus.updateStatus(isOnline, responseTimeMs, errorRate, activePlayers);
+            return ResponseEntity.ok("Server status updated successfully.");
+
     }
 }
